@@ -40,8 +40,14 @@ const onSearch = () => {};
 	display: flex;
 	align-items: center;
 }
+.left-content a {
+	margin-right: 10px;
+}
 .right-content {
 	display: flex;
 	align-items: center;
+}
+.right-content button {
+	margin-left: 10px;
 }
 </style>

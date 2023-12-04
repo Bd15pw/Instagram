@@ -1,15 +1,27 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+import AuthModal from "./AuthModal.vue";
 
 const searchUserName = ref("");
+const isAuth = ref(false);
+const router = useRouter();
 
-const onSearch = () => {};
+const onSearch = () => {
+	if (searchUserName.value) {
+		router.push(`/profile/${searchUserName.value}`);
+		searchUserName.value = "";
+	}
+};
+
+const goToUsersProfile = () => {};
+
+const handleLogout = () => {};
 </script>
 
 <template>
 	<a-layout>
-		<a-layout-header :style="{ position: 'fixed', zIndex: 1, width: '100%' }">
+		<a-layout-header>
 			<div class="nav-container">
 				<div class="left-content">
 					<router-link to="/">Instagram</router-link>
@@ -21,9 +33,13 @@ const onSearch = () => {};
 						@search="onSearch"
 					/>
 				</div>
-				<div class="right-content">
-					<AButton type="primary">SingUp</AButton>
-					<AButton type="primary">Logout</AButton>
+				<div class="right-content" v-if="!isAuth">
+					<AuthModal :isLogin="false" />
+					<AuthModal :isLogin="true" />
+				</div>
+				<div class="right-content" v-else>
+					<AButton type="primary" @click="goToUsersProfile">Profile</AButton>
+					<AButton type="primary" @click="handleLogout">Logout</AButton>
 				</div>
 			</div>
 		</a-layout-header>
@@ -41,7 +57,7 @@ const onSearch = () => {};
 	align-items: center;
 }
 .left-content a {
-	margin-right: 10px;
+	margin-right: 15px;
 }
 .right-content {
 	display: flex;

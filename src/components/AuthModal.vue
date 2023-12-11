@@ -1,5 +1,10 @@
 <script setup>
 import { ref, reactive, defineProps } from "vue";
+import { useUserStore } from "../stores/users.js";
+import { storeToRefs } from "pinia";
+
+const userStore = useUserStore();
+const { errorMessage, loading } = storeToRefs(userStore);
 
 const props = defineProps(["isLogin"]);
 const title = props.isLogin ? "Login" : "Signup";
@@ -15,7 +20,7 @@ const showModal = () => {
 };
 
 const handleOk = (e) => {
-	open.value = false;
+	userStore.handleSignup(userCredentials);
 };
 </script>
 
@@ -44,6 +49,9 @@ const handleOk = (e) => {
 					v-model:value="userCredentials.password"
 				/>
 			</div>
+			<ATypographyText v-if="errorMessage" type="danger">
+				{{ errorMessage }}</ATypographyText
+			>
 		</a-modal>
 	</div>
 </template>

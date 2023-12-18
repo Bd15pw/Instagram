@@ -4,7 +4,7 @@ import { useUserStore } from "../stores/users.js";
 import { storeToRefs } from "pinia";
 
 const userStore = useUserStore();
-const { errorMessage, loading } = storeToRefs(userStore);
+const { errorMessage, loading } = storeToRefs(userStore); // chcemy aby error massage byl aktualizowany dlatego bedzie store to ref
 
 const props = defineProps(["isLogin"]);
 const title = props.isLogin ? "Login" : "Signup";
@@ -19,8 +19,16 @@ const showModal = () => {
 	open.value = true;
 };
 
+const clearUserCredentialsInput = () => {
+	(userCredentials.email = ""),
+		(userCredentials.username = ""),
+		(userCredentials.password = "");
+};
+
 const handleOk = (e) => {
 	userStore.handleSignup(userCredentials);
+	// clearUserCredentialsInput();
+	// open.value = false;
 };
 </script>
 

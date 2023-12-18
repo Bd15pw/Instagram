@@ -30,7 +30,33 @@ export const useUserStore = defineStore("users", () => {
 			return (errorMessage.value = "Password length is to short");
 		}
 
+		// sprawdzenie czy uzytkownik istnieje juz w naszej bazie danych
+
+		const { data: userExistWithUsername } = await supabase
+			.from("users")
+			.select()
+			.eq("username", username)
+			.single();
+
+		if (userExistWithUsername) {
+			return (errorMessage.value = "Username is already used");
+		}
 		errorMessage.value = "";
+		// dodawanie uzytkownika do auth w supabase
+
+		const { error } = await supabase.auth.signUp({
+			email,
+			password,
+		});
+
+		if (error) {
+			return (errorMessage.value = error.message);
+		}
+		// dodanie uzytkownika do tablei w supabase
+		await supabase.from("users").insert({
+			username,
+			email,
+		});
 	};
 
 	const handleLogin = () => {};
